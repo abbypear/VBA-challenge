@@ -1,0 +1,62 @@
+# VBA-challenge
+Sub VBAChallenge():
+
+    'Setting the variables
+    Dim StockVolume As Double
+    Dim FirstTicker As Double
+    Dim YearlyChange As Double
+    Dim OpeningValue As Double
+    Dim ClosingValue As Double
+    Dim PercentageChange As Double
+    Dim Ticker As String
+    
+    'Variable tracking, values, and rows
+    Dim i As Long
+    Dim SumTable As Integer
+    FirstTicker = 2
+    SumTable = 2
+    StockVolume = 0
+    LastRow = Cells(Rows.Count, 2).End(xlUp).Row
+     
+    'Loop-di-loop
+    For i = 2 To LastRow
+    Ticker = Cells(i, 1).Value
+        If i = FirstTicker Then
+            OpeningValue = Cells(i, 3).Value
+        End If
+    
+        YearlyChange = (Cells(i, 6).Value) - OpeningValue
+
+        If OpeningValue <> 0 Then
+            PercentageChange = (YearlyChange) / (OpeningValue)
+            Else
+            PercentageChange = 0
+            End If
+        
+        StockVolume = StockVolume + Cells(i, 7).Value
+    
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+        Range("I" & SumTable).Value = Ticker
+        Range("J" & SumTable).Value = YearlyChange
+        
+        If YearlyChange > 0 Then
+        Range("J" & SumTable).Interior.ColorIndex = 4
+        ElseIf YearlyChange < 0 Then
+        Range("J" & SumTable).Interior.ColorIndex = 3
+        End If
+        
+        Range("K" & SumTable).Value = PercentageChange
+        Range("L" & SumTable).Value = StockVolume
+        FirstTicker = i + 1
+        SumTable = SumTable + 1
+        StockVolume = 0
+    End If
+        
+    Next i
+    
+    Cells(1, 9).Value = "Ticker"
+    Cells(1, 10).Value = "Yearly Change"
+    Cells(1, 11).Value = "Percentage Change"
+    Cells(1, 12).Value = "Total Stock Volume"
+    
+End Sub
